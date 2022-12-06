@@ -4,31 +4,25 @@ const input = getInput().split("\r\n");
 const [rock, paper, scissors] = [1, 2, 3];
 const [loss, draw, win] = [0, 3, 6];
 
-let score = 0;
+const gameValues = {
+    "A X": 4,
+    "A Y": 8,
+    "A Z": 3,
+    "B X": 1,
+    "B Y": 5,
+    "B Z": 9,
+    "C X": 7,
+    "C Y": 2,
+    "C Z": 6
+};
 
-input.map(move => {
-    if(move[0] === 'A' && move[2] === 'X') {
-        score += (draw+rock);
-    } else if(move[0] === 'A' && move[2] === 'Y') {
-        score += (win+paper);
-    } else if(move[0] === 'A' && move[2] === 'Z') {
-        score += (loss+scissors);
-    } else if(move[0] === 'B' && move[2] === 'X') {
-        score += (loss+rock);
-    } else if(move[0] === 'B' && move[2] === 'Y') {
-        score += (draw+paper);
-    } else if(move[0] === 'B' && move[2] === 'Z') {
-        score += (win+scissors);
-    } else if(move[0] === 'C' && move[2] === 'X') {
-        score += (win+rock);
-    } else if(move[0] === 'C' && move[2] === 'Y') {
-        score += (loss+paper);
-    } else if(move[0] === 'C' && move[2] === 'Z') {
-        score += (draw+scissors);
-    }
-});
+function sumGameValues(sum, play) {
+    return sum + gameValues[play];
+}
 
-console.log(`Part One: ${score}`);
+const totalScore = input.reduce(sumGameValues, 0);
+
+console.log(`Part One: ${totalScore}`);
 
 /**
  * Part Two:
@@ -37,34 +31,19 @@ console.log(`Part One: ${score}`);
  * Z = Win
  */
 
-score = 0;
+const roundTwo = {
+    "A": {"X": 3, "Y": 4, "Z": 8},
+    "B": {"X": 1, "Y": 5, "Z": 9},
+    "C": {"X": 2, "Y": 6, "Z": 7}
+};
 
-input.map(move => {
-    if(move[2] === 'X') {
-        if(move[0] === 'A') {
-            score += (loss+scissors);
-        } else if(move[0] === 'B') {
-            score += (loss+rock);
-        } else {
-            score += (loss+paper);
-        }
-    } else if(move[2] === 'Y') {
-        if(move[0] === 'A') {
-            score += (draw+rock);
-        } else if(move[0] === 'B') {
-            score += (draw+paper);
-        } else {
-            score += (draw+scissors);
-        }
-    } else {
-        if(move[0] === 'A') {
-            score += (win+paper);
-        } else if(move[0] === 'B') {
-            score += (win+scissors);
-        } else {
-            score += (win+rock);
-        }
-    }
-});
+const sum = (sum, item) => sum + item;
 
-console.log(`Part Two: ${score}`);
+function sumSecondGameValues(sum, [opponent, outcome]) {
+    return sum + roundTwo[opponent][outcome];
+}
+
+const secondGame = input.map(game => game.split(' '));
+const totalScoreTwo = secondGame.reduce(sumSecondGameValues, 0);
+
+console.log(`Part Two: ${totalScoreTwo}`);
